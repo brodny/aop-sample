@@ -1,0 +1,5 @@
+﻿https://levelup.gitconnected.com/aop-dotnet-applications-67c6d94c08b0
+https://medium.com/@nik96a/using-di-with-dispatchproxy-based-decorators-in-c-net-core-ac02f02c5fe5
+https://greatrexpectations.com/2018/10/25/decorators-in-net-core-with-dependency-injection
+https://www.c-sharpcorner.com/article/aspect-oriented-programming-in-c-sharp-using-dispatchproxy/
+https://stackoverflow.com/questions/38467753/realproxy-in-dotnet-core/48150664#48150664
