@@ -5,6 +5,8 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AopSample", "AopSample\AopSample.csproj", "{2A05E1F5-858D-4C87-AF6F-89068CEE70E9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LBrodny.AOP", "LBrodny.AOP\LBrodny.AOP.csproj", "{201089EB-AA9F-474F-9736-BD70DDA7A23D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2A05E1F5-858D-4C87-AF6F-89068CEE70E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A05E1F5-858D-4C87-AF6F-89068CEE70E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A05E1F5-858D-4C87-AF6F-89068CEE70E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{201089EB-AA9F-474F-9736-BD70DDA7A23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{201089EB-AA9F-474F-9736-BD70DDA7A23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{201089EB-AA9F-474F-9736-BD70DDA7A23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{201089EB-AA9F-474F-9736-BD70DDA7A23D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
