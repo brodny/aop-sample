@@ -1,14 +1,16 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 #nullable enable
 
 namespace LBrodny.AOP
 {
-    public abstract class AOPAttribute
+    [AttributeUsage(AttributeTargets.Method)]
+    public abstract class AOPAttribute : Attribute
     {
         public abstract object Execute(
+            object? target,
             MethodInfo method,
-            object[] args,
-            object[] annotations);
+            object?[] args);
     }
 }
