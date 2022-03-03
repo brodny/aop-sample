@@ -1,11 +1,13 @@
 ﻿#nullable enable
 
+using LBrodny.AOP;
 using System;
 
 namespace AopSample
 {
     public interface ITestService
     {
+        [PerformanceLogger]
         string SayHello(string name);
     }
 
@@ -17,6 +19,8 @@ namespace AopSample
             {
                 throw new ArgumentNullException(nameof(name));
             }
+
+            System.Threading.Thread.Sleep(2000);
 
             return $"Hello, {name}!";
         }

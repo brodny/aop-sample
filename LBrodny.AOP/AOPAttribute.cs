@@ -8,7 +8,7 @@ namespace LBrodny.AOP
     [AttributeUsage(AttributeTargets.Method)]
     public abstract class AOPAttribute : Attribute
     {
-        public abstract object Execute(
+        public abstract object? Execute(
             object? target,
             MethodInfo method,
             object?[] args);
