@@ -1,4 +1,5 @@
 ﻿using Moq;
+using FluentAssertions;
 using System;
 using Xunit;
 
@@ -9,15 +10,23 @@ namespace LBrodny.Decorator.Tests
         [Fact]
         public void Should_throw_when_class_provided()
         {
-            Assert.Throws<NotSupportedException>(
-                () => DecoratorFactory<SampleClass>.Create(new SampleClass()));
+            Action action = () => DecoratorFactory<SampleClass>.Create(new SampleClass());
+
+            action
+                .Should()
+                .Throw<TypeInitializationException>()
+                .WithInnerException<NotSupportedException>();
         }
 
         [Fact]
         public void Should_throws_when_simple_type_provided()
         {
-            Assert.Throws<NotSupportedException>(
-                () => DecoratorFactory<int>.Create(5));
+            Action action = () => DecoratorFactory<int>.Create(5);
+
+            action
+                .Should()
+                .Throw<TypeInitializationException>()
+                .WithInnerException<NotSupportedException>();
         }
 
         [Fact]
