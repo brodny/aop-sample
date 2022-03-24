@@ -46,11 +46,11 @@ namespace LBrodny.Decorator.Tests
             Assert.NotSame(toBeDecorated, decorated);
         }
 
-        private class SampleClass
+        public class SampleClass
         {
         }
 
-        private interface TSampleInterface
+        public interface TSampleInterface
         {
             object Method();
         }

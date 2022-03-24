@@ -21,7 +21,9 @@ namespace LBrodny.Decorator
                 throw new ArgumentNullException(nameof(decorated));
             }
 
-            throw new NotImplementedException();
+            TInterface proxiedInterface = DispatchProxy.Create<TInterface, DecoratorFactory<TInterface>>();
+
+            return proxiedInterface;
         }
 
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
