@@ -7,6 +7,11 @@ namespace LBrodny.Decorator
     {
         public static TInterface Create(TInterface decorated)
         {
+            if (decorated is null)
+            {
+                throw new ArgumentNullException(nameof(decorated));
+            }
+
             throw new NotImplementedException();
         }
 
