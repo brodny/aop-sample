@@ -20,16 +20,24 @@ namespace LBrodny.Decorator
 
         public IDecorateObject DecoratingObject { get; private set; } = default!;
 
-        public static TInterface Create(TInterface decorated)
+        public static TInterface Create(
+            TInterface decorated,
+            IDecorateObject decoratingObject)
         {
             if (decorated is null)
             {
                 throw new ArgumentNullException(nameof(decorated));
             }
 
+            if (decoratingObject is null)
+            {
+                throw new ArgumentNullException(nameof(decoratingObject));
+            }
+
             TInterface proxiedInterface = DispatchProxy.Create<TInterface, DecoratorFactory<TInterface>>();
 
             ((IContainDecoratedObject<TInterface>)proxiedInterface).SetDecorated(decorated);
+            ((IContainDecoratingObject)proxiedInterface).SetDecoratingObject(decoratingObject);
 
             return proxiedInterface;
         }
