@@ -123,6 +123,38 @@ namespace LBrodny.Decorator.Tests
             }
         }
 
+        [Fact]
+        public void Should_execute_MethodThrewException_after_the_decorated_object_method_throws()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            using (Sequence.Create())
+            {
+                toBeDecoratedMock
+                    .Setup(_ => _.Method())
+                    .InSequence()
+                    .Throws<Exception>();
+
+                _decoratorMock
+                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<object?>()))
+                    .InSequence(Times.Never());
+
+                _decoratorMock
+                    .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<Exception>()))
+                    .InSequence();
+
+                TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                    toBeDecoratedMock.Object,
+                    _decoratorMock.Object);
+
+                try
+                {
+                    _ = decorated.Method();
+                }
+                catch { }
+            }
+        }
+
         public class SampleClass
         {
         }
