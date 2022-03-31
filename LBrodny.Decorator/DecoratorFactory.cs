@@ -3,7 +3,9 @@ using System.Reflection;
 
 namespace LBrodny.Decorator
 {
-    public class DecoratorFactory<TInterface> : DispatchProxy, IContainDecoratedObject<TInterface>
+    public class DecoratorFactory<TInterface> : DispatchProxy,
+        IContainDecoratedObject<TInterface>,
+        IContainDecoratingObject
         where TInterface: class
     {
         static DecoratorFactory()
@@ -15,6 +17,8 @@ namespace LBrodny.Decorator
         }
 
         public TInterface Decorated { get; private set; } = default!;
+
+        public IDecorateObject DecoratingObject { get; private set; } = default!;
 
         public static TInterface Create(TInterface decorated)
         {
@@ -38,6 +42,16 @@ namespace LBrodny.Decorator
             }
 
             Decorated = decorated;
+        }
+
+        public void SetDecoratingObject(IDecorateObject decoratingObject)
+        {
+            if (decoratingObject is null)
+            {
+                throw new ArgumentNullException(nameof(decoratingObject));
+            }
+
+            DecoratingObject = decoratingObject;
         }
 
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
