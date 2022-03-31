@@ -2,6 +2,8 @@
 using FluentAssertions;
 using System;
 using Xunit;
+using Moq.Sequences;
+using System.Reflection;
 
 namespace LBrodny.Decorator.Tests
 {
@@ -74,6 +76,28 @@ namespace LBrodny.Decorator.Tests
             _ = decorated.Method();
 
             toBeDecoratedMock.Verify(m => m.Method(), Times.Once);
+        }
+
+        [Fact]
+        public void Should_execute_MethodCalling_before_the_decorated_object_method_is_called()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            using (Sequence.Create())
+            {
+                _decoratorMock
+                    .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object[]>()))
+                    .InSequence();
+                toBeDecoratedMock
+                    .Setup(_ => _.Method())
+                    .InSequence();
+
+                TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                    toBeDecoratedMock.Object,
+                    _decoratorMock.Object);
+
+                _ = decorated.Method();
+            }
         }
 
         public class SampleClass

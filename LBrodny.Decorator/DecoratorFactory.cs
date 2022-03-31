@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace LBrodny.Decorator
@@ -64,6 +65,15 @@ namespace LBrodny.Decorator
 
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
         {
+            Debug.Assert(DecoratingObject != null);
+
+            if (targetMethod is null)
+            {
+                throw new ArgumentNullException(nameof(targetMethod));
+            }
+
+            DecoratingObject.MethodCalling(targetMethod, args);
+
             object? result = targetMethod?.Invoke(this.Decorated, args);
 
             return result;
