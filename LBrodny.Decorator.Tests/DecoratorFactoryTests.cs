@@ -37,6 +37,18 @@ namespace LBrodny.Decorator.Tests
         }
 
         [Fact]
+        public void Should_throw_when_decorator_is_null()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+            TSampleInterface toBeDecorated = toBeDecoratedMock.Object;
+
+            Assert.Throws<ArgumentNullException>(
+                () => DecoratorFactory<TSampleInterface>.Create(
+                    toBeDecorated,
+                    null!));
+        }
+
+        [Fact]
         public void Should_create_a_decorating_object_that_implements_provided_interface()
         {
             var toBeDecoratedMock = new Mock<TSampleInterface>();
