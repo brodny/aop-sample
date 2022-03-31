@@ -86,10 +86,33 @@ namespace LBrodny.Decorator.Tests
             using (Sequence.Create())
             {
                 _decoratorMock
-                    .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object[]>()))
+                    .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>()))
                     .InSequence();
                 toBeDecoratedMock
                     .Setup(_ => _.Method())
+                    .InSequence();
+
+                TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                    toBeDecoratedMock.Object,
+                    _decoratorMock.Object);
+
+                _ = decorated.Method();
+            }
+        }
+
+        [Fact]
+        public void Should_execute_MethodCalled_after_the_decorated_object_method_successfully_executes()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            using (Sequence.Create())
+            {
+                toBeDecoratedMock
+                    .Setup(_ => _.Method())
+                    .InSequence();
+
+                _decoratorMock
+                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<object?>()))
                     .InSequence();
 
                 TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(

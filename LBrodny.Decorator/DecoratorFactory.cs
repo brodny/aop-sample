@@ -74,7 +74,9 @@ namespace LBrodny.Decorator
 
             DecoratingObject.MethodCalling(targetMethod, args);
 
-            object? result = targetMethod?.Invoke(this.Decorated, args);
+            object? result = targetMethod.Invoke(Decorated, args);
+
+            DecoratingObject.MethodCalled(targetMethod, args, result);
 
             return result;
         }
