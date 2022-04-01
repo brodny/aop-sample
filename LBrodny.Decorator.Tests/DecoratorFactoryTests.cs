@@ -247,12 +247,8 @@ namespace LBrodny.Decorator.Tests
                 config => config.WithStrictOrdering());
         }
 
-        [Theory]
-        [AutoData]
-        public void Should_pass_empty_array_to_MethodCalling_method_called_with_no_arguments(
-            int param1,
-            string param2,
-            SampleClass? param3)
+        [Fact]
+        public void Should_pass_empty_array_to_MethodCalling_method_called_with_no_arguments()
         {
             var toBeDecoratedMock = new Mock<TSampleInterface>();
 
@@ -275,12 +271,8 @@ namespace LBrodny.Decorator.Tests
                 config => config.WithStrictOrdering());
         }
 
-        [Theory]
-        [AutoData]
-        public void Should_pass_empty_array_to_MethodCalled_method_called_with_no_arguments(
-            int param1,
-            string param2,
-            SampleClass? param3)
+        [Fact]
+        public void Should_pass_empty_array_to_MethodCalled_method_called_with_no_arguments()
         {
             var toBeDecoratedMock = new Mock<TSampleInterface>();
 
@@ -303,12 +295,8 @@ namespace LBrodny.Decorator.Tests
                 config => config.WithStrictOrdering());
         }
 
-        [Theory]
-        [AutoData]
-        public void Should_pass_empty_array_to_MethodThrewException_method_called_with_no_arguments(
-            int param1,
-            string param2,
-            SampleClass? param3)
+        [Fact]
+        public void Should_pass_empty_array_to_MethodThrewException_method_called_with_no_arguments()
         {
             var toBeDecoratedMock = new Mock<TSampleInterface>();
             toBeDecoratedMock
