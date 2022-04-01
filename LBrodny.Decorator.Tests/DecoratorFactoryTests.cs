@@ -4,6 +4,7 @@ using System;
 using Xunit;
 using Moq.Sequences;
 using System.Reflection;
+using AutoFixture.Xunit2;
 
 namespace LBrodny.Decorator.Tests
 {
@@ -153,6 +154,97 @@ namespace LBrodny.Decorator.Tests
                 }
                 catch { }
             }
+        }
+
+        [Theory]
+        [AutoData]
+        public void Should_pass_decorated_method_arguments_to_MethodCalling_method(
+            int param1,
+            string param2,
+            SampleClass? param3)
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            object?[] actualArguments = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object?[]>()))
+                .Callback((MethodInfo _, object?[] args) => actualArguments = args);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            _ = decorated.MethodWithParameters(param1, param2, param3);
+
+            object?[] expectedArguments = new object?[] { param1, param2, param3 };
+
+            actualArguments.Should().BeEquivalentTo(
+                expectedArguments,
+                config => config.WithStrictOrdering());
+        }
+
+        [Theory]
+        [AutoData]
+        public void Should_pass_decorated_method_arguments_to_MethodCalled_method(
+            int param1,
+            string param2,
+            SampleClass? param3)
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            object?[] actualArguments = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
+                .Callback((MethodInfo _, object?[] args, object? _) => actualArguments = args);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            _ = decorated.MethodWithParameters(param1, param2, param3);
+
+            object?[] expectedArguments = new object?[] { param1, param2, param3 };
+
+            actualArguments.Should().BeEquivalentTo(
+                expectedArguments,
+                config => config.WithStrictOrdering());
+        }
+
+        [Theory]
+        [AutoData]
+        public void Should_pass_decorated_method_arguments_to_MethodThrewException_method(
+            int param1,
+            string param2,
+            SampleClass? param3)
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+            toBeDecoratedMock
+                .Setup(_ => _.MethodWithParameters(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<SampleClass?>()))
+                .Throws<Exception>();
+
+            object?[] actualArguments = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
+                .Callback((MethodInfo _, object?[] args, Exception _) => actualArguments = args);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            try
+            {
+                _ = decorated.MethodWithParameters(param1, param2, param3);
+            }
+            catch { }
+
+            object?[] expectedArguments = new object?[] { param1, param2, param3 };
+
+            actualArguments.Should().BeEquivalentTo(
+                expectedArguments,
+                config => config.WithStrictOrdering());
         }
 
         public class SampleClass
