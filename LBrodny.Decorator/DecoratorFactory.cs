@@ -72,6 +72,8 @@ namespace LBrodny.Decorator
                 throw new ArgumentNullException(nameof(targetMethod));
             }
 
+            args ??= Array.Empty<object?>();
+
             DecoratingObject.MethodCalling(targetMethod, args);
 
             try

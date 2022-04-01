@@ -86,7 +86,7 @@ namespace LBrodny.Decorator.Tests
             using (Sequence.Create())
             {
                 _decoratorMock
-                    .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>()))
+                    .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object?[]>()))
                     .InSequence();
                 toBeDecoratedMock
                     .Setup(_ => _.Method())
@@ -112,7 +112,7 @@ namespace LBrodny.Decorator.Tests
                     .InSequence();
 
                 _decoratorMock
-                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<object?>()))
+                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
                     .InSequence();
 
                 TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
@@ -136,11 +136,11 @@ namespace LBrodny.Decorator.Tests
                     .Throws<Exception>();
 
                 _decoratorMock
-                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<object?>()))
+                    .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
                     .InSequence(Times.Never());
 
                 _decoratorMock
-                    .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]?>(), It.IsAny<Exception>()))
+                    .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
                     .InSequence();
 
                 TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
@@ -162,6 +162,8 @@ namespace LBrodny.Decorator.Tests
         public interface TSampleInterface
         {
             object Method();
+            object MethodWithParameters(int param1, string param2, SampleClass? param3);
+            void VoidMethod();
         }
     }
 }
