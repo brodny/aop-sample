@@ -141,7 +141,7 @@ namespace LBrodny.Decorator.Tests
                     .InSequence(Times.Never());
 
                 _decoratorMock
-                    .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
+                    .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception?>()))
                     .InSequence();
 
                 TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
@@ -227,8 +227,8 @@ namespace LBrodny.Decorator.Tests
             object?[] actualArguments = null!;
 
             _decoratorMock
-                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
-                .Callback((MethodInfo _, object?[] args, Exception _) => actualArguments = args);
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception?>()))
+                .Callback((MethodInfo _, object?[] args, Exception? _) => actualArguments = args);
 
             TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
                 toBeDecoratedMock.Object,
@@ -306,8 +306,8 @@ namespace LBrodny.Decorator.Tests
             object?[] actualArguments = null!;
 
             _decoratorMock
-                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
-                .Callback((MethodInfo _, object?[] args, Exception _) => actualArguments = args);
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception?>()))
+                .Callback((MethodInfo _, object?[] args, Exception? _) => actualArguments = args);
 
             TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
                 toBeDecoratedMock.Object,
@@ -383,8 +383,8 @@ namespace LBrodny.Decorator.Tests
             MethodInfo actualMethodInfo = null!;
 
             _decoratorMock
-                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
-                .Callback((MethodInfo methodInfo, object?[] _, Exception _) => actualMethodInfo = methodInfo);
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception?>()))
+                .Callback((MethodInfo methodInfo, object?[] _, Exception? _) => actualMethodInfo = methodInfo);
 
             TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
                 toBeDecoratedMock.Object,
@@ -445,6 +445,35 @@ namespace LBrodny.Decorator.Tests
             decorated.VoidMethod();
 
             actualResult.Should().BeNull();
+        }
+
+        [Theory]
+        [AutoData]
+        public void Should_pass_exception_thrown_to_MethodThrewException(
+            Exception expectedException)
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+            toBeDecoratedMock
+                .Setup(_ => _.Method())
+                .Throws(expectedException);
+
+            Exception? actualException = null;
+
+            _decoratorMock
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception?>()))
+                .Callback((MethodInfo _, object?[] _, Exception? exception) => actualException = exception);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            try
+            {
+                _ = decorated.Method();
+            }
+            catch { }
+
+            actualException.Should().BeSameAs(expectedException);
         }
 
         public class SampleClass

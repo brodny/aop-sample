@@ -84,9 +84,9 @@ namespace LBrodny.Decorator
 
                 return result;
             }
-            catch (Exception e)
+            catch (TargetInvocationException e)
             {
-                DecoratingObject.MethodThrewException(targetMethod, args, e);
+                DecoratingObject.MethodThrewException(targetMethod, args, e.InnerException);
                 throw;
             }
         }
