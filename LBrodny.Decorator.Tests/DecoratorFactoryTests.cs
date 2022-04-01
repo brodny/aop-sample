@@ -326,6 +326,82 @@ namespace LBrodny.Decorator.Tests
                 config => config.WithStrictOrdering());
         }
 
+        [Fact]
+        public void Should_pass_called_method_information_to_MethodCalling_method()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            MethodInfo actualMethodInfo = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalling(It.IsAny<MethodInfo>(), It.IsAny<object?[]>()))
+                .Callback((MethodInfo methodInfo, object?[] _) => actualMethodInfo = methodInfo);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            _ = decorated.Method();
+
+            MethodInfo expectedMethodInfo = typeof(TSampleInterface)
+                .GetMethod(nameof(TSampleInterface.Method))!;
+
+            actualMethodInfo.Should().BeSameAs(expectedMethodInfo);
+        }
+
+        [Fact]
+        public void Should_pass_called_method_information_to_MethodCalled_method()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            MethodInfo actualMethodInfo = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
+                .Callback((MethodInfo methodInfo, object?[] _, object? _) => actualMethodInfo = methodInfo);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            _ = decorated.Method();
+
+            MethodInfo expectedMethodInfo = typeof(TSampleInterface)
+                .GetMethod(nameof(TSampleInterface.Method))!;
+
+            actualMethodInfo.Should().BeSameAs(expectedMethodInfo);
+        }
+
+        [Fact]
+        public void Should_pass_called_method_information_to_MethodThrewException_method()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+            toBeDecoratedMock
+                .Setup(_ => _.Method())
+                .Throws<Exception>();
+
+            MethodInfo actualMethodInfo = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodThrewException(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<Exception>()))
+                .Callback((MethodInfo methodInfo, object?[] _, Exception _) => actualMethodInfo = methodInfo);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            try
+            {
+                _ = decorated.Method();
+            }
+            catch { }
+
+            MethodInfo expectedMethodInfo = typeof(TSampleInterface)
+                .GetMethod(nameof(TSampleInterface.Method))!;
+
+            actualMethodInfo.Should().BeSameAs(expectedMethodInfo);
+        }
+
         public class SampleClass
         {
         }
