@@ -402,6 +402,51 @@ namespace LBrodny.Decorator.Tests
             actualMethodInfo.Should().BeSameAs(expectedMethodInfo);
         }
 
+        [Theory]
+        [AutoData]
+        public void Should_pass_method_result_to_MethodCalled_method(
+            int expectedResult)
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+            toBeDecoratedMock
+                .Setup(_ => _.Method())
+                .Returns(expectedResult);
+
+            object? actualResult = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
+                .Callback((MethodInfo _, object?[] _, object? result) => actualResult = result);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            _ = decorated.Method();
+
+            actualResult.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        public void Should_pass_null_as_result_to_MethodCalled_method_for_void_methods()
+        {
+            var toBeDecoratedMock = new Mock<TSampleInterface>();
+
+            object? actualResult = null!;
+
+            _decoratorMock
+                .Setup(_ => _.MethodCalled(It.IsAny<MethodInfo>(), It.IsAny<object?[]>(), It.IsAny<object?>()))
+                .Callback((MethodInfo _, object?[] _, object? result) => actualResult = result);
+
+            TSampleInterface decorated = DecoratorFactory<TSampleInterface>.Create(
+                toBeDecoratedMock.Object,
+                _decoratorMock.Object);
+
+            decorated.VoidMethod();
+
+            actualResult.Should().BeNull();
+        }
+
         public class SampleClass
         {
         }
